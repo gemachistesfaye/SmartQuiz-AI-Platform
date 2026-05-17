@@ -106,6 +106,13 @@ export default function AIAssistant() {
                    "• **Code Audit**: Paste your snippets for optimization suggestions.\n" +
                    "• **Architecture**: Advice on Design Patterns (Singleton, Factory, Observer).\n" +
                    "• **Modern Standards**: ES2023+ features and best practices.";
+      } else if (lowerInput.includes('review my code') || lowerInput.includes('code review')) {
+        response = "### 🔍 Code Review Simulation\n\n" +
+                   "I see you want a code review! Since I am currently in **Simulation Mode**, here are the top 3 things I always look for in JavaScript code:\n\n" +
+                   "1. **Scoping**: Are you using `const` and `let`? Avoid `var` at all costs to prevent memory leaks and scoping bugs.\n" +
+                   "2. **Comparison**: Always use strict equality (`===`) instead of abstract equality (`==`) to avoid weird type coercion bugs.\n" +
+                   "3. **Async Safety**: If you are using `async/await`, make sure your code is wrapped in a `try/catch` block to handle rejected promises.\n\n" +
+                   "If you paste a specific small snippet, I can try to give you more targeted feedback!";
       } else if (lowerInput.includes('closure')) {
         response = "### 🔒 JavaScript Closures\n\n" +
                    "A closure is the combination of a function and the **lexical environment** within which that function was declared. \n\n" +
@@ -137,6 +144,31 @@ export default function AIAssistant() {
                    "• **while**: Continues as long as a condition is true.\n" +
                    "• **for...of**: Best for iterating over arrays.\n" +
                    "• **for...in**: Best for iterating over object properties.";
+      } else if (lowerInput.includes('typescript')) {
+        response = "### 🟦 TypeScript\n\n" +
+                   "TypeScript is a strongly typed superset of JavaScript that adds **static types**.\n\n" +
+                   "It helps you catch errors early in your editor and makes large codebases much easier to maintain. All valid JavaScript is also valid TypeScript!";
+      } else if (lowerInput.includes('react')) {
+        response = "### ⚛️ React\n\n" +
+                   "React is a component-based JavaScript library for building user interfaces.\n\n" +
+                   "• **Virtual DOM**: React updates the actual DOM efficiently by comparing it with a virtual memory representation.\n" +
+                   "• **State**: Data that can change over time and affects what is rendered.";
+      } else if (lowerInput.includes('css')) {
+        response = "### 🎨 CSS\n\n" +
+                   "Cascading Style Sheets (CSS) is used to style the structure created by HTML.\n\n" +
+                   "Modern CSS features like **Flexbox**, **Grid**, and **Custom Properties (Variables)** make it extremely powerful for creating responsive layouts.";
+      } else if (lowerInput.includes('python') || lowerInput.includes('java')) {
+        response = "### 🐍☕ Python & Java\n\n" +
+                   "I am primarily a JavaScript tutor, but I know about other languages too!\n\n" +
+                   "• **Python**: Great for backend, AI, and data science. Known for its clean, readable syntax.\n" +
+                   "• **Java**: A strictly typed, object-oriented language used heavily in enterprise environments.";
+      } else if (lowerInput.includes('how') || lowerInput.includes('what') || lowerInput.includes('code') || lowerInput.includes('function') || lowerInput.includes('variable')) {
+        response = "### 💻 General Programming Assistant\n\n" +
+                   "I see you are asking a general programming question! Since I am currently in **Simulation Mode**, here is a quick guide on that topic:\n\n" +
+                   "• **Variables**: Always use `const` by default. Only use `let` if you know the value will change. Never use `var`.\n" +
+                   "• **Functions**: Break your code into small, reusable functions. A function should ideally do one thing well.\n" +
+                   "• **Debugging**: Use `console.log()` to check variable values, or use the browser's debugger to step through code.\n\n" +
+                   "Try asking me about **Closures**, **Event Loop**, **Promises**, or **React** for a more detailed specific response!";
       } else if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
         response = "Welcome back, Senior Dev! I'm ready to assist with your JavaScript architecture or debugging. What's on the roadmap today?";
       } else {
@@ -283,6 +315,31 @@ export default function AIAssistant() {
                 </div>
               )}
               <div ref={messagesEndRef} />
+            </div>
+
+            {/* Quick Prompts */}
+            <div className="px-6 py-3 border-t border-white/5 flex gap-2 overflow-x-auto bg-white/[0.01]">
+              <button 
+                type="button"
+                onClick={() => setInput("Review my code: ")}
+                className="text-[10px] font-bold text-gray-400 hover:text-white bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 hover:border-white/10 transition-colors shrink-0 flex items-center gap-1"
+              >
+                <span>🔍</span> Code Review
+              </button>
+              <button 
+                type="button"
+                onClick={() => setInput("Explain the Event Loop")}
+                className="text-[10px] font-bold text-gray-400 hover:text-white bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 hover:border-white/10 transition-colors shrink-0 flex items-center gap-1"
+              >
+                <span>🔄</span> Event Loop
+              </button>
+              <button 
+                type="button"
+                onClick={() => setInput("What is a Closure?")}
+                className="text-[10px] font-bold text-gray-400 hover:text-white bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 hover:border-white/10 transition-colors shrink-0 flex items-center gap-1"
+              >
+                <span>🔒</span> Closures
+              </button>
             </div>
 
             {/* Input Area */}
