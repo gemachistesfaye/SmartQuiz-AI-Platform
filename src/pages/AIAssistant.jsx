@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import DashboardLayout from '../layouts/DashboardLayout';
 import { Send, Sparkles, Brain, Code, Lightbulb, User, Bot, Loader2, Zap, Settings } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { GoogleGenerativeAI } from "@google/generative-ai";
+
 
 export default function AIAssistant() {
   const [messages, setMessages] = useState([
@@ -12,14 +12,14 @@ export default function AIAssistant() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [apiKey, setApiKey] = useState(() => {
-    const defaultKey = import.meta.env.VITE_GEMINI_API_KEY || "";
-    const saved = localStorage.getItem('gemini_api_key');
+    const defaultKey = import.meta.env.VITE_OPENAI_API_KEY || "";
+    const saved = localStorage.getItem('openai_api_key');
     if (saved === null) {
-      if (defaultKey) localStorage.setItem('gemini_api_key', defaultKey);
+      if (defaultKey) localStorage.setItem('openai_api_key', defaultKey);
       return defaultKey;
     }
     if (saved !== '' && defaultKey && saved !== defaultKey) {
-      localStorage.setItem('gemini_api_key', defaultKey);
+      localStorage.setItem('openai_api_key', defaultKey);
       return defaultKey;
     }
     return saved;
@@ -37,7 +37,7 @@ export default function AIAssistant() {
 
   const saveApiKey = (key) => {
     setApiKey(key);
-    localStorage.setItem('gemini_api_key', key);
+    localStorage.setItem('openai_api_key', key);
     setShowApiSettings(false);
   };
 
@@ -52,23 +52,42 @@ export default function AIAssistant() {
 
     if (apiKey) {
       try {
-        const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-        
-        const prompt = `You are a specialized "Pro JavaScript Tutor" for the SmartQuiz app. 
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: [
+              {
+                role: "system",
+                content: `You are a specialized "Pro JavaScript Tutor" for the SmartQuiz app. 
                        STRICT RULES:
                        1. ONLY answer questions related to JavaScript, React, Web Security, CSS, and Web Development.
                        2. If a user asks about anything else (history, cooking, politics, etc.), politely decline and remind them you are here for JavaScript mastery.
-                       3. Always provide code snippets in JavaScript/JSX where possible.
-                       4. The user's question is: "${input}".`;
+                       3. Always provide code snippets in JavaScript/JSX where possible.`
+              },
+              {
+                role: "user",
+                content: input
+              }
+            ]
+          })
+        });
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error?.message || "OpenAI API Error");
+        }
+
+        const data = await response.json();
+        const text = data.choices[0].message.content;
 
         setMessages(prev => [...prev, { role: 'bot', content: text }]);
       } catch (error) {
-        console.error("Gemini API Error:", error);
+        console.error("OpenAI API Error:", error);
         setMessages(prev => [...prev, { role: 'bot', content: "⚠️ **API Error:** " + error.message + ". Please check your API key in settings." }]);
       } finally {
         setIsTyping(false);
@@ -171,11 +190,11 @@ export default function AIAssistant() {
               className="absolute top-24 right-6 w-80 glass-card p-6 z-50 border-primary/20 shadow-2xl"
             >
               <h3 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
-                <Settings size={16} /> Gemini API Config
+                <Settings size={16} /> OpenAI API Config
               </h3>
               <p className="text-[10px] text-gray-500 mb-4 leading-relaxed">
-                Enter your Google Gemini API Key to enable real-time, unlimited AI conversations. 
-                Get one for free at <a href="https://aistudio.google.com/" target="_blank" rel="noreferrer" className="text-primary hover:underline">AI Studio</a>.
+                Enter your OpenAI API Key to enable real-time, unlimited AI conversations. 
+                Get one at <a href="https://platform.openai.com/" target="_blank" rel="noreferrer" className="text-primary hover:underline">OpenAI Platform</a>.
               </p>
               <input 
                 type="password" 
