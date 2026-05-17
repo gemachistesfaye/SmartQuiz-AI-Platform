@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuiz } from '../hooks/useQuiz';
 import QuestionCard from '../components/quiz/QuestionCard';
 import ExplanationModal from '../components/quiz/ExplanationModal';
-import { Brain, Timer, Zap, Trophy, RefreshCcw, Home } from 'lucide-react';
+import { Brain, Timer, Zap, Trophy, RefreshCcw, Home, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function QuizPage() {
@@ -43,8 +43,18 @@ export default function QuizPage() {
 
   if (!isActive && !isFinished) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-6">
-        <div className="glass-card max-w-2xl w-full p-10 text-center">
+      <div className="min-h-screen bg-background flex items-center justify-center p-6 relative">
+        {/* Back Button */}
+        <div className="absolute top-6 left-6 z-10">
+          <Link 
+            to="/dashboard"
+            className="flex items-center gap-2 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-all font-semibold text-sm shadow-lg"
+          >
+            <ArrowLeft size={18} /> Back to Dashboard
+          </Link>
+        </div>
+
+        <div className="glass-card max-w-2xl w-full p-10 text-center mt-12 sm:mt-0">
           <div className="bg-primary/20 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-8">
             <Brain className="text-primary" size={40} />
           </div>
@@ -142,6 +152,13 @@ export default function QuizPage() {
         {/* Quiz Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
+            <Link 
+              to="/dashboard"
+              className="p-3 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+              title="Exit Quiz"
+            >
+              <ArrowLeft size={20} />
+            </Link>
             <div className="glass p-3 rounded-xl">
               <Brain className="text-primary" size={24} />
             </div>
