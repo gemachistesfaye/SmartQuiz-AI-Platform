@@ -12,13 +12,13 @@ export default function AIAssistant() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [apiKey, setApiKey] = useState(() => {
-    const defaultKey = "AIzaSyBEP_UcBrrC8WHAxfeUQSrlagsDvU1wXiQ";
+    const defaultKey = import.meta.env.VITE_GEMINI_API_KEY || "";
     const saved = localStorage.getItem('gemini_api_key');
     if (saved === null) {
-      localStorage.setItem('gemini_api_key', defaultKey);
+      if (defaultKey) localStorage.setItem('gemini_api_key', defaultKey);
       return defaultKey;
     }
-    if (saved !== '' && saved !== defaultKey) {
+    if (saved !== '' && defaultKey && saved !== defaultKey) {
       localStorage.setItem('gemini_api_key', defaultKey);
       return defaultKey;
     }
