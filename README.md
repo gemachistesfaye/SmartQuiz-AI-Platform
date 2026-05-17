@@ -108,7 +108,10 @@ To access the **SuperAdmin Dashboard**, use the following master credentials:
 *   **Password**: `Admin123!`
 
 ### 📱 Mobile Login (Testing)
-*   **OTP Code**: `000000`
+*   **OTP Code**:
+    ```text
+    000000
+    ```
 
 ---
 
