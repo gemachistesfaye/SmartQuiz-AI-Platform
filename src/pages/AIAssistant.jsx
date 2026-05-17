@@ -11,7 +11,19 @@ export default function AIAssistant() {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [apiKey, setApiKey] = useState(localStorage.getItem('gemini_api_key') || '');
+  const [apiKey, setApiKey] = useState(() => {
+    const defaultKey = "AIzaSyBEP_UcBrrC8WHAxfeUQSrlagsDvU1wXiQ";
+    const saved = localStorage.getItem('gemini_api_key');
+    if (saved === null) {
+      localStorage.setItem('gemini_api_key', defaultKey);
+      return defaultKey;
+    }
+    if (saved !== '' && saved !== defaultKey) {
+      localStorage.setItem('gemini_api_key', defaultKey);
+      return defaultKey;
+    }
+    return saved;
+  });
   const [showApiSettings, setShowApiSettings] = useState(false);
   const messagesEndRef = useRef(null);
 
